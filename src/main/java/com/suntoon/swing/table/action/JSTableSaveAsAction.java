@@ -127,12 +127,14 @@ public class JSTableSaveAsAction extends JSTableBaseAction {
                     case "attrFormulaCol":
                         nodeElement.addAttribute("Formula", fieldValue.toString());
                         break;
+                    case "attrTValueCol":
+                        nodeElement.addAttribute("TValue", fieldValue.toString());
+                        break;
                     default:
                         break;
                 }
 
-                nodeElement.addAttribute("IsQueryField", "").addAttribute("Explain", "").addAttribute("TValue", "")
-                        .addAttribute("ValueTmpl1", "").addAttribute("VT1Enable", "FALSE");
+                nodeElement.addAttribute("IsQueryField", "").addAttribute("Explain", "").addAttribute("ValueTmpl1", "").addAttribute("VT1Enable", "FALSE");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

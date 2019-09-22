@@ -137,11 +137,11 @@ public class JSInputTypeDialog extends JDialog {
 
                 if (chooseListener != null){
 
-                    setInputTypeData(index);
+                    InputTypeEntity ite1 = setInputTypeData(index);
 
 
                     // todo
-                    chooseListener.afterChoose(inputTypeEntity);
+                    chooseListener.afterChoose(ite1);
                 }
                 setVisible(false);
             }
@@ -258,33 +258,33 @@ public class JSInputTypeDialog extends JDialog {
         setModal(true);
     }
 
-    private void setInputTypeData(int index) {
+    private InputTypeEntity setInputTypeData(int index) {
 
-        inputTypeEntity = new InputTypeEntity();
-        inputTypeEntity.setIndex(index);
-        inputTypeEntity.setName(listdata[index]);
+        InputTypeEntity ite = new InputTypeEntity();
+        ite.setIndex(index);
+        ite.setName(listdata[index]);
 
         switch (index) {
             case 1:
-                inputTypeEntity.setContent(jsTimePanel.getSelected());
+                ite.setContent(jsTimePanel.getSelected());
             case 2:
                 break;
             case 3:
                 break;
             case 10:
-                inputTypeEntity.setContent(jsLonLatPanel.getSelected());
+                ite.setContent(jsLonLatPanel.getSelected());
                 break;
             case 11:
-                inputTypeEntity.setContent(jsLonLatPanel.getSelected());
+                ite.setContent(jsLonLatPanel.getSelected());
                 break;
             case 17:
-                inputTypeEntity.setContent(jsLonLatPanel.getSelected());
+                ite.setContent(jsLonLatPanel.getSelected());
                 break;
             case 18:
-                inputTypeEntity.setContent(jsLonLatPanel.getSelected());
+                ite.setContent(jsLonLatPanel.getSelected());
                 break;
         }
-
+        return ite;
     }
 
     /**

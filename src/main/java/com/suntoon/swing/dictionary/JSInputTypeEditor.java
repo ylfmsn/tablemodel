@@ -1,11 +1,13 @@
 package com.suntoon.swing.dictionary;
 
 import com.suntoon.swing.entity.InputTypeEntity;
+import com.suntoon.swing.table.JSTableModel;
 import com.suntoon.swing.table.editor.JSEditorDelegateAdapter;
 import com.suntoon.swing.dictionary.JSInputTypeDialog.InputTypeChooserLisenter;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableModel;
 import javax.swing.tree.TreeCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -38,6 +40,12 @@ public class JSInputTypeEditor extends AbstractCellEditor implements TableCellEd
 
 	InputTypeEntity inputTypeEntity = null;
 
+	private TableModel tableModel;
+
+	private int selectRow;
+
+
+
 	/**
 	 * 带有初始化控件对象的操作
 	 *
@@ -64,7 +72,7 @@ public class JSInputTypeEditor extends AbstractCellEditor implements TableCellEd
 		this.inputTypeChooser.addInputTypeChooserLisenter(new InputTypeChooserLisenter() {
 			@Override
 			public void afterChoose(InputTypeEntity inputTypeEntity) {
-				delegate.setValue(inputTypeEntity);
+				delegate.setValue(inputTypeEntity, selectRow);
 			}
 
 		});
@@ -98,13 +106,14 @@ public class JSInputTypeEditor extends AbstractCellEditor implements TableCellEd
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
-		delegate.setValue(value);
+		delegate.setValue(value, row);
+
+		tableModel = table.getModel();
+		selectRow = row;
 
 		if (isSelected) {
-			System.out.println(editorComponent.getText());
-			if (table.getCellEditor(row, table.getColumnCount() - 1).getCellEditorValue() != null)
-				System.out.println(table.getCellEditor(row, table.getColumnCount() - 1).getCellEditorValue().toString());
-			//editorComponent.setText(value.toString());
+			inputTypeEntity.setName(tableModel.getValueAt(row, column).toString());
+			inputTypeEntity.setContent(tableModel.getValueAt(row, 11).toString());
 			inputTypeChooser.setInputTypeEntity(inputTypeEntity);
 			inputTypeChooser.setVisible(true);
 		}
@@ -122,20 +131,31 @@ public class JSInputTypeEditor extends AbstractCellEditor implements TableCellEd
 
 		private static final long serialVersionUID = -9163652875049976071L;
 
+		@Override
+		public void setValue(Object value) {
+			super.setValue(value);
+		}
+
 		/**
 		 * 值发生改变的时候执行的操作
 		 */
-		public void setValue(Object value) {
+		public void setValue(Object value, int row) {
 			if (inputTypeChooser != null)
 				inputTypeEntity = inputTypeChooser.getInputTypeEntity();
 
-			//super.setValue(value);
-			if (inputTypeEntity == null) {
-				super.setValue(value.toString());
-				editorComponent.setText(value.toString());
-			} else{
-				super.setValue(inputTypeEntity.getName());
-				editorComponent.setText(inputTypeEntity.getName());
+			if (value instanceof String) {
+				setValue(value);
+			} else {
+				//super.setValue(value);
+				if (inputTypeEntity == null) {
+					setValue(((InputTypeEntity) value).getName());
+					editorComponent.setText(((InputTypeEntity) value).getName());
+					tableModel.setValueAt(((InputTypeEntity) value).getContent(), row, 11);
+				} else {
+					setValue(inputTypeEntity.getName());
+					editorComponent.setText(inputTypeEntity.getName());
+					tableModel.setValueAt(inputTypeEntity.getContent(), row, 11);
+				}
 			}
 		}
 

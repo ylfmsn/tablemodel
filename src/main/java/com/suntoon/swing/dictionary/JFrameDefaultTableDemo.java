@@ -109,6 +109,7 @@ public class JFrameDefaultTableDemo extends JFrame {
         col3.setModelIndex(3);
         col3.setWidth(25);
         col3.setMinWidth(25);
+        col3.setDefaultValue(1);
         col3.setCellRenderer(renderR); // 右侧显示
 
         // 精度
@@ -120,6 +121,7 @@ public class JFrameDefaultTableDemo extends JFrame {
         col4.setModelIndex(4);
         col4.setWidth(25);
         col4.setMinWidth(25);
+        col3.setDefaultValue(1);
         col4.setCellRenderer(renderR); // 右侧显示
         // 带有范围限定的
         //col3.setCellEditor(new JSTableSpinnerEditor(new JSpinner(new SpinnerNumberModel(1, 1, 255, 1))));
@@ -132,7 +134,7 @@ public class JFrameDefaultTableDemo extends JFrame {
         col5.setModelIndex(5);
         col5.setMinWidth(160);
         col5.setMaxWidth(160);
-        //col5.setDefaultValue();
+        col5.setDefaultValue("手动");
         col5.setCellRenderer(new JSInputTypeRenderer());
         col5.setCellEditor(new JSInputTypeEditor());
 
@@ -224,7 +226,7 @@ public class JFrameDefaultTableDemo extends JFrame {
                 public Collection<FieldsEntity> onRetrieve() throws Exception {
 
                     List<FieldsEntity> result = new LinkedList<>();
-                    for (int i = 0; i < 110; i++) {
+                    for (int i = 0; i < 10; i++) {
                         FieldsEntity entity = new FieldsEntity();
                         entity.setAttrIdCol(i);
                         entity.setAttrNameCol("name:" + i);

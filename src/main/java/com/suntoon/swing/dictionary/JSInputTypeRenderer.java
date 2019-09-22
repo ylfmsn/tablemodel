@@ -35,31 +35,16 @@ public class JSInputTypeRenderer extends JButton implements TableCellRenderer, S
 		} else {
 			this.setBackground(table.getBackground());
 		}
-
-		this.setText(value.toString());
-
-		/*JSButtonIcon icon = (JSButtonIcon)this.getIcon();
 		
 		try
 		{
-			if (value instanceof Integer) {
-				icon.setIconColor(new Color((Integer)value));
-			} else if (value instanceof Long) {
-				icon.setIconColor(new Color(((Long) value).intValue()));
-			} else if (value instanceof String) {
-				icon.setIconColor(Color.getColor(value.toString()));
-			} else if (value instanceof Color) {
-				icon.setIconColor((Color)value);
-			}
-		
+			this.setText(value.toString());
 		}
 		catch(Exception ex)
 		{
-			icon.setIconColor(Color.BLACK);
-		}*/
+			this.setText("手动");
+		}
 
 		return this;
 	}
-
-	
 }
