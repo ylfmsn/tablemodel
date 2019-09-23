@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
  */
 public class OneLevelListPanel extends JPanel {
 
+
     public OneLevelListPanel() {
 
         setLayout(new MigLayout(

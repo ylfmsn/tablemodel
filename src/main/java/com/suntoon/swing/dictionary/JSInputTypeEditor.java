@@ -1,13 +1,12 @@
 package com.suntoon.swing.dictionary;
 
-import com.suntoon.swing.entity.InputTypeEntity;
+import com.suntoon.swing.entity.FieldsEntity;
 import com.suntoon.swing.table.JSTableModel;
 import com.suntoon.swing.table.editor.JSEditorDelegateAdapter;
-import com.suntoon.swing.dictionary.JSInputTypeDialog.InputTypeChooserLisenter;
+import com.suntoon.swing.dictionary.JSInputtypeTabDialog.InputtypeTabChooserLisenter;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableModel;
 import javax.swing.tree.TreeCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -36,11 +35,11 @@ public class JSInputTypeEditor extends AbstractCellEditor implements TableCellEd
 	/**
 	 * colorchoose对象
 	 */
-	protected JSInputTypeDialog inputTypeChooser;
+	protected JSInputtypeTabDialog inputTypeChooser;
 
-	InputTypeEntity inputTypeEntity = null;
+	private FieldsEntity fieldsEntity;
 
-	private TableModel tableModel;
+	private JSTableModel tableModel;
 
 	private int selectRow;
 
@@ -67,14 +66,19 @@ public class JSInputTypeEditor extends AbstractCellEditor implements TableCellEd
 		editorComponent.addActionListener(delegate);
 
 		if (inputTypeChooser == null)
-			inputTypeChooser = new JSInputTypeDialog();
+			inputTypeChooser = new JSInputtypeTabDialog();
 
-		this.inputTypeChooser.addInputTypeChooserLisenter(new InputTypeChooserLisenter() {
+		this.inputTypeChooser.addInputTypeChooserLisenter(new InputtypeTabChooserLisenter() {
 			@Override
-			public void afterChoose(InputTypeEntity inputTypeEntity) {
-				delegate.setValue(inputTypeEntity, selectRow);
+			public void afterChoose(FieldsEntity fieldsEntity) {
+				delegate.setValue(fieldsEntity, selectRow);
 			}
 
+			@Override
+			public void afterCancle() {
+				editorComponent.validate();
+				editorComponent.repaint();
+			}
 		});
 	}
 
@@ -108,23 +112,36 @@ public class JSInputTypeEditor extends AbstractCellEditor implements TableCellEd
 
 		delegate.setValue(value, row);
 
-		tableModel = table.getModel();
+		tableModel = (JSTableModel) table.getModel();
 		selectRow = row;
 
 		if (isSelected) {
-			inputTypeEntity.setName(tableModel.getValueAt(row, column).toString());
-			inputTypeEntity.setContent(tableModel.getValueAt(row, 11).toString());
-			inputTypeChooser.setInputTypeEntity(inputTypeEntity);
+			FieldsEntity fe = new FieldsEntity();
+			fe.setAttrInputTypeCol(editorComponent.getText());
+			if (tableModel.getValueAt(row, 11) == null)
+				fe.setAttrTValueCol("");
+			else
+				fe.setAttrTValueCol(tableModel.getValueAt(row, 11).toString());
+			inputTypeChooser.setValue(fe);
 			inputTypeChooser.setVisible(true);
 		}
 
 		return editorComponent;
 	}
 
+	private int getArrayIndex(String arr) {
+
+		for (int i = 0; i < inputTypeChooser.getListdata().length; i++) {
+			if (arr.equals(inputTypeChooser.getListdata()[i])) {
+				return i;
+			}
+		}
+
+		return 0;
+	}
+
 	/**
 	 * 实现的内部方法
-	 * 
-	 * @author sam
 	 *
 	 */
 	protected class EditorDelegate extends JSEditorDelegateAdapter {
@@ -137,24 +154,28 @@ public class JSInputTypeEditor extends AbstractCellEditor implements TableCellEd
 		}
 
 		/**
-		 * 值发生改变的时候执行的操作
+		 * 值发生改变的时候执行的操作，第一次点击是value为初始显示值：手动
 		 */
 		public void setValue(Object value, int row) {
+
 			if (inputTypeChooser != null)
-				inputTypeEntity = inputTypeChooser.getInputTypeEntity();
+				fieldsEntity = inputTypeChooser.getFieldsEntity();
 
 			if (value instanceof String) {
 				setValue(value);
+				editorComponent.setText(value.toString());
 			} else {
-				//super.setValue(value);
-				if (inputTypeEntity == null) {
-					setValue(((InputTypeEntity) value).getName());
-					editorComponent.setText(((InputTypeEntity) value).getName());
-					tableModel.setValueAt(((InputTypeEntity) value).getContent(), row, 11);
+				if (fieldsEntity == null) {
+					setValue(((FieldsEntity) value).getAttrInputTypeCol());
+					editorComponent.setText(((FieldsEntity) value).getAttrInputTypeCol());
 				} else {
-					setValue(inputTypeEntity.getName());
-					editorComponent.setText(inputTypeEntity.getName());
-					tableModel.setValueAt(inputTypeEntity.getContent(), row, 11);
+					setValue(fieldsEntity.getAttrInputTypeCol());
+					editorComponent.setText(fieldsEntity.getAttrInputTypeCol());
+
+					if (fieldsEntity.getAttrTValueCol() == null)
+						tableModel.setValueAt("", row, 11);
+					else
+						tableModel.setValueAt(fieldsEntity.getAttrTValueCol(), row, 11);
 				}
 			}
 		}
@@ -201,5 +222,13 @@ public class JSInputTypeEditor extends AbstractCellEditor implements TableCellEd
 		public void itemStateChanged(ItemEvent e) {
 			JSInputTypeEditor.this.stopCellEditing();
 		}
+	}
+
+	public FieldsEntity getFieldsEntity() {
+		return fieldsEntity;
+	}
+
+	public void setFieldsEntity(FieldsEntity fieldsEntity) {
+		this.fieldsEntity = fieldsEntity;
 	}
 }

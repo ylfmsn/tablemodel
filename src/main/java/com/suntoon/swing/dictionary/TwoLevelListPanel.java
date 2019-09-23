@@ -25,9 +25,6 @@ public class TwoLevelListPanel extends JPanel {
 
         setLayout(new BorderLayout());
         init();
-
-
-
     }
 
     private void init() {

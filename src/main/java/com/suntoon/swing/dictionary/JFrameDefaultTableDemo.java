@@ -109,7 +109,7 @@ public class JFrameDefaultTableDemo extends JFrame {
         col3.setModelIndex(3);
         col3.setWidth(25);
         col3.setMinWidth(25);
-        col3.setDefaultValue(1);
+        col3.setDefaultValue(32);
         col3.setCellRenderer(renderR); // 右侧显示
 
         // 精度
@@ -233,13 +233,13 @@ public class JFrameDefaultTableDemo extends JFrame {
                         entity.setAttrTypeCol(i % 3 == 0 ? "整数" : (i % 2 == 1 ? "字符" : "浮点"));
                         entity.setAttrLengthCol((i + 2) % 20);
                         entity.setAttrPrecCol((i + 3) % 20);
-                        entity.setAttrInputTypeCol("手写");
+                        entity.setAttrInputTypeCol("手动");
                         entity.setAttrAliasCol("alias:" + i);
-                        entity.setAttrShowCol(i % 2 == 0 ? true : false);
-                        entity.setAttrKeyCol(i % 2 == 0 ? false : true);
-                        entity.setAttrDefaultCol("default:" + i);
-                        entity.setAttrFormulaCol("formula:" + i);
-                        entity.setAttrTValueCol("tvalue:" + i);
+                        entity.setAttrShowCol(true);
+                        entity.setAttrKeyCol(false);
+                        entity.setAttrDefaultCol("");
+                        entity.setAttrFormulaCol("");
+                        entity.setAttrTValueCol("");
                         result.add(entity);
                     }
 

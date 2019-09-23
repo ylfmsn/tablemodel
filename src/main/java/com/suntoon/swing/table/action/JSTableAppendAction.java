@@ -37,6 +37,7 @@ public class JSTableAppendAction extends JSTableBaseAction {
                 JOptionPane.showMessageDialog(null, "追加数据失败");
                 return;
             }
+            //module.setValueAt("字段" + (module.getRowCount() - 1), module.getRowCount() - 1, 1);
             int iRow = this.getTable().convertRowIndexToView(this.getTable().getRowCount() - 1);
             this.getTable().scrollRowToVisible(iRow);
             if (!module.getEditable()) {
